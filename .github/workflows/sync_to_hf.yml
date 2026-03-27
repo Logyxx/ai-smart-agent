@@ -3,9 +3,10 @@ name: Sync to HuggingFace Spaces
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
-  sync:
+  sync-to-hub:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -16,6 +17,4 @@ jobs:
       - name: Push to HuggingFace Spaces
         env:
           HF_TOKEN: ${{ secrets.HFTOKEN }}
-        run: |
-          git remote add hf https://bytemeuk:$HF_TOKEN@huggingface.co/spaces/bytemeuk/ai-smart-agent
-          git push hf main --force
+        run: git push -f https://bytemeuk:$HF_TOKEN@huggingface.co/spaces/bytemeuk/ai-smart-agent main
