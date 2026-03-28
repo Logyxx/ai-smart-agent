@@ -22,7 +22,7 @@ An **AI agent** that reasons step-by-step — selecting the right tools, executi
 
 ## Live Demo
 
-> 🔗 **[Try it on Hugging Face Spaces →](https://huggingface.co/spaces/bytemeuk/ai-smart-agent)**
+> 🔗 **[Try it on Hugging Face Spaces →](https://huggingface.co/spaces/lakshmenroy/ai-smart-agent)**
 
 ## How the Agent Works
 
