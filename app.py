@@ -67,7 +67,7 @@ with gr.Blocks(theme=gr.themes.Soft(), title="AI Smart Agent") as demo:
 
     with gr.Row():
         with gr.Column(scale=2):
-            chatbot = gr.Chatbot(label="Conversation", height=420)
+            chatbot = gr.Chatbot(label="Conversation", height=420, type="tuples")
             with gr.Row():
                 question_box = gr.Textbox(
                     placeholder="Ask me anything...",
