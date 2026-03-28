@@ -17,4 +17,4 @@ jobs:
       - name: Push to HuggingFace Spaces
         env:
           HF_TOKEN: ${{ secrets.HFTOKEN }}
-        run: git push -f https://bytemeuk:$HF_TOKEN@huggingface.co/spaces/bytemeuk/ai-smart-agent main
+        run: git push -f https://lakshmenroy:$HF_TOKEN@huggingface.co/spaces/lakshmenroy/ai-smart-agent main
