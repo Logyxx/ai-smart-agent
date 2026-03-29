@@ -112,3 +112,4 @@ with gr.Blocks(theme=gr.themes.Soft(), title="AI Smart Agent") as demo:
     )
 
 demo.launch()
+
