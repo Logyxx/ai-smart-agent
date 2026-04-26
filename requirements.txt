@@ -1,6 +1,6 @@
 gradio>=5.9.1,<6.0.0
 langchain>=0.2.0
-langchain-huggingface>=0.0.3
+langchain-groq>=0.1.0
 langchain-text-splitters>=0.2.0
 duckduckgo-search>=6.0.0
 wikipedia>=1.4.0

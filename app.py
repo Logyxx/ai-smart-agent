@@ -1,8 +1,8 @@
 """
 AI Smart Agent — Gradio interface.
 
-The agent uses Mistral-7B (free via HuggingFace Inference API) to decide which
-tools to call, runs the tools, then synthesises a final answer.
+The agent uses Llama 3 (via Groq API) to decide which tools to call,
+runs the tools, then synthesises a final answer.
 
 Tools available:
   - datetime  — current date/time
@@ -10,7 +10,7 @@ Tools available:
   - wikipedia — Wikipedia summaries
   - web_search — DuckDuckGo search
 
-Requires: HF_TOKEN environment variable (HuggingFace token — free)
+Requires: GROQ_API_KEY environment variable (free at console.groq.com)
 """
 
 import os
@@ -33,9 +33,8 @@ def run_agent(question: str, history: list) -> tuple:
     if not question.strip():
         return "", "", history
 
-    hf_token = os.getenv("HF_TOKEN")
-    if not hf_token:
-        history.append((question, "⚠️ HF_TOKEN is not set. Add it as a Space secret."))
+    if not os.getenv("GROQ_API_KEY"):
+        history.append((question, "⚠️ GROQ_API_KEY is not set. Add it as a Space secret."))
         return "", "", history
 
     thought_log = ""
@@ -61,7 +60,7 @@ with gr.Blocks(theme=gr.themes.Soft(), title="AI Smart Agent") as demo:
         # 🤖 AI Smart Agent
         Ask any question — the agent decides which tools to use, runs them, and synthesises an answer.
 
-        > Powered by **Zephyr-7B** via HuggingFace Inference API. Tools: web search, Wikipedia, calculator, datetime.
+        > Powered by **Llama 3** via Groq API. Tools: web search, Wikipedia, calculator, datetime.
         """
     )
 
