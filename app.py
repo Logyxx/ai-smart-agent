@@ -61,7 +61,7 @@ with gr.Blocks(theme=gr.themes.Soft(), title="AI Smart Agent") as demo:
         # 🤖 AI Smart Agent
         Ask any question — the agent decides which tools to use, runs them, and synthesises an answer.
 
-        > Powered by **Mistral-7B** via HuggingFace Inference API. Tools: web search, Wikipedia, calculator, datetime.
+        > Powered by **Zephyr-7B** via HuggingFace Inference API. Tools: web search, Wikipedia, calculator, datetime.
         """
     )
 

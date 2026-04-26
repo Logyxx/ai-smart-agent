@@ -2,9 +2,9 @@
 AI Smart Agent — ReAct-style reasoning loop.
 
 Flow:
-  1. Use Mistral-7B to decide which tools to call (tool selection step)
+  1. Use Zephyr-7B to decide which tools to call (tool selection step)
   2. Execute each tool and collect results
-  3. Use Mistral-7B to synthesise a final answer from the tool results
+  3. Use Zephyr-7B to synthesise a final answer from the tool results
 
 All LLM calls go through HuggingFace Inference API (free with HF account).
 """
@@ -23,46 +23,44 @@ from agent.tools import ALL_TOOLS, TOOL_MAP, Tool
 # ── LLM setup ─────────────────────────────────────────────────────────────────
 
 def _get_llm() -> HuggingFaceEndpoint:
-    hf_token = os.getenv("HF_TOKEN")
-    if not hf_token:
+    if not os.getenv("HF_TOKEN"):
         raise EnvironmentError("HF_TOKEN is not set.")
     return HuggingFaceEndpoint(
-        repo_id="mistralai/Mistral-7B-Instruct-v0.2",
-        huggingfacehub_api_token=hf_token,
+        repo_id="HuggingFaceH4/zephyr-7b-beta",
         task="text-generation",
         max_new_tokens=512,
         temperature=0.1,
-        do_sample=False,
     )
 
 
 # ── Prompts ───────────────────────────────────────────────────────────────────
 
 TOOL_SELECTION_TEMPLATE = """\
-<s>[INST] You are an AI assistant that decides which tools to use to answer a question.
+<|system|>
+You are an AI assistant that decides which tools to use to answer a question.
 
 Available tools:
 {tool_list}
-
-Question: {question}
 
 Respond with a JSON array of tool calls. Each item has "tool" (tool name) and "input" (what to pass to the tool).
 Only include tools that are actually needed.
 Respond with ONLY the JSON array, nothing else.
 
-Example: [{{"tool": "wikipedia", "input": "Python programming language"}}]
-[/INST]"""
+Example: [{{"tool": "wikipedia", "input": "Python programming language"}}]</s>
+<|user|>
+Question: {question}</s>
+<|assistant|>"""
 
 SYNTHESIS_TEMPLATE = """\
-<s>[INST] You are a helpful AI assistant. Answer the user's question using the tool results below.
+<|system|>
+You are a helpful AI assistant. Answer the user's question using the tool results below.
 Be concise and direct. If the tools didn't return useful information, say so.
 
-Question: {question}
-
 Tool results:
-{tool_results}
-
-Answer: [/INST]"""
+{tool_results}</s>
+<|user|>
+{question}</s>
+<|assistant|>"""
 
 
 # ── Agent ─────────────────────────────────────────────────────────────────────
@@ -141,7 +139,7 @@ class SmartAgent:
             yield thought_log, ""
             # Fall back to direct answer
             prompt = PromptTemplate.from_template(
-                "<s>[INST] {question} [/INST]"
+                "<|system|>\nYou are a helpful assistant.</s>\n<|user|>\n{question}</s>\n<|assistant|>"
             )
             chain = prompt | self.llm | self._parser
             answer = chain.invoke({"question": question})
