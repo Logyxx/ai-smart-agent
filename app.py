@@ -112,5 +112,5 @@ with gr.Blocks(theme=gr.themes.Soft(), title="AI Smart Agent") as demo:
         "[Logyxx](https://github.com/Logyxx) portfolio"
     )
 
-demo.launch()
+demo.launch(show_api=False)
 
