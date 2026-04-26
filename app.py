@@ -34,7 +34,8 @@ def run_agent(question: str, history: list) -> tuple:
         return "", "", history
 
     if not os.getenv("GROQ_API_KEY"):
-        history.append((question, "⚠️ GROQ_API_KEY is not set. Add it as a Space secret."))
+        history.append({"role": "user", "content": question})
+        history.append({"role": "assistant", "content": "⚠️ GROQ_API_KEY is not set. Add it as a Space secret."})
         return "", "", history
 
     thought_log = ""
@@ -48,7 +49,8 @@ def run_agent(question: str, history: list) -> tuple:
         thought_log = f"❌ Agent error: {e}"
         final_answer = ""
 
-    history.append((question, final_answer or "_No answer generated._"))
+    history.append({"role": "user", "content": question})
+    history.append({"role": "assistant", "content": final_answer or "_No answer generated._"})
     return "", thought_log, history
 
 
@@ -66,7 +68,7 @@ with gr.Blocks(theme=gr.themes.Soft(), title="AI Smart Agent") as demo:
 
     with gr.Row():
         with gr.Column(scale=2):
-            chatbot = gr.Chatbot(label="Conversation", height=420, type="tuples")
+            chatbot = gr.Chatbot(label="Conversation", height=420, type="messages")
             with gr.Row():
                 question_box = gr.Textbox(
                     placeholder="Ask me anything...",
